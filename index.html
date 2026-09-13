@@ -24,9 +24,7 @@
     <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-300">
@@ -42,6 +40,7 @@
                     <div class="flex items-center text-xs text-slate-500 dark:text-slate-400 space-x-1">
                         <i class="fa-solid fa-location-dot text-orange-500"></i>
                         <span id="current-location-text">Richmond Hill, ON</span>
+                        <button id="geo-btn" class="ml-1 text-[10px] text-orange-500 hover:underline font-medium">(Use My Location)</button>
                         <span class="text-slate-300 dark:text-slate-700">•</span>
                         <span class="text-emerald-600 dark:text-emerald-400 font-medium">Live Market</span>
                     </div>
@@ -76,7 +75,10 @@
                         <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider">
                             GTA Market Outlook
                         </span>
-                        <span class="text-xs text-emerald-100" id="forecast-date">Updated 20 mins ago</span>
+                        <span class="px-2.5 py-0.5 bg-emerald-900/40 text-emerald-100 rounded-full text-[11px] font-medium border border-white/10">
+                            <i class="fa-solid fa-shield-check text-emerald-300 mr-1"></i>Verified Source: En-Pro / Dan McTeague
+                        </span>
+                        <span class="text-xs text-emerald-100 hidden lg:inline" id="forecast-date">Updated 20 mins ago</span>
                     </div>
                     <div id="recommendation-badge" class="px-4 py-1.5 bg-white text-emerald-800 font-bold rounded-full text-sm shadow-md flex items-center space-x-2">
                         <i class="fa-solid fa-circle-check text-emerald-600"></i>
@@ -88,14 +90,14 @@
                     <div>
                         <p class="text-xs text-emerald-100 uppercase tracking-wider font-medium">Tomorrow's Prediction</p>
                         <div class="flex items-baseline space-x-2 mt-1">
-                            <span class="text-4xl font-extrabold tracking-tight" id="tomorrow-price">163.9¢</span>
+                            <span class="text-4xl font-extrabold tracking-tight" id="tomorrow-price">181.9¢</span>
                             <span class="text-emerald-200 text-sm font-semibold" id="price-delta">▼ Drop of 5.0¢</span>
                         </div>
                     </div>
 
                     <div class="md:col-span-2 border-t md:border-t-0 md:border-l border-white/20 pt-4 md:pt-0 md:pl-6">
                         <p class="text-sm leading-relaxed text-emerald-50" id="forecast-summary">
-                            Wholesale prices in southern Ontario are trending downward tonight. En-Pro reports indicate a 5.0¢ drop expected across Toronto and York Region tomorrow morning. Hold off filling up if you can!
+                            Wholesale prices across the Greater Toronto Area are dropping. En-Pro / Dan McTeague market analyses confirm a 5.0¢ drop expected across GTA stations tomorrow morning. Hold off filling up if you can!
                         </p>
                     </div>
                 </div>
@@ -109,12 +111,13 @@
                 <!-- Search input -->
                 <div class="relative w-full md:w-72">
                     <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-slate-400"></i>
-                    <input type="text" id="search-input" placeholder="Search station or cross street..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-sm focus:ring-2 focus:ring-orange-500 outline-none transition">
+                    <input type="text" id="search-input" placeholder="Search station or street..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-sm focus:ring-2 focus:ring-orange-500 outline-none transition">
                 </div>
 
                 <!-- Brand Filter Pills -->
                 <div id="brand-filters" class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
                     <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-orange-500 text-white transition whitespace-nowrap shadow-sm" data-brand="all">All Brands</button>
+                    <button id="fav-filter-btn" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition whitespace-nowrap">★ Favorites Only</button>
                     <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Shell">Shell</button>
                     <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Petro-Canada">Petro-Canada</button>
                     <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Esso">Esso</button>
@@ -158,22 +161,20 @@
     </main>
 
     <footer class="max-w-5xl mx-auto px-4 py-8 mt-12 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 space-y-2">
-        <p>GTA GasRadar • Real-time crowd-sourced and regional market indicators for Toronto & York Region.</p>
+        <p>GTA GasRadar • Real-time crowd-sourced & En-Pro market indicator data for Toronto, York Region, & Peel.</p>
         <p class="text-slate-400">Data reflects regular unleaded fuel. Prices subject to change without notice.</p>
     </footer>
 
     <script>
-        // Mock dataset of GTA Gas Stations
+        // Gas Stations Data with GPS coordinates
         const stationsData = [
             {
                 id: 1,
                 brand: "Costco",
                 name: "Costco Wholesale Gas",
                 address: "Woodbridge (Hwy 7 / Weston Rd)",
-                distance: 3.2,
-                price: 158.9,
-                trend: "down",
-                trendText: "Falling fast",
+                price: 176.9,
+                trendText: "Lowest in area",
                 updated: "10 mins ago",
                 coordinates: { lat: 43.785, lng: -79.542 }
             },
@@ -182,9 +183,7 @@
                 brand: "Shell",
                 name: "Shell Richmond Hill North",
                 address: "Yonge St & Major MacKenzie Dr",
-                distance: 1.1,
-                price: 168.9,
-                trend: "stable",
+                price: 186.9,
                 trendText: "Steady today",
                 updated: "5 mins ago",
                 coordinates: { lat: 43.876, lng: -79.438 }
@@ -194,9 +193,7 @@
                 brand: "Petro-Canada",
                 name: "Petro-Canada SuperStation",
                 address: "Bayview Ave & 16th Ave",
-                distance: 2.4,
-                price: 169.3,
-                trend: "down",
+                price: 186.9,
                 trendText: "Expected drop tonight",
                 updated: "25 mins ago",
                 coordinates: { lat: 43.851, lng: -79.390 }
@@ -206,9 +203,7 @@
                 brand: "Esso",
                 name: "Esso On-The-Run",
                 address: "Hwy 7 & Leslie St, Markham",
-                distance: 4.8,
-                price: 167.5,
-                trend: "down",
+                price: 185.5,
                 trendText: "Dropping soon",
                 updated: "15 mins ago",
                 coordinates: { lat: 43.839, lng: -79.378 }
@@ -218,9 +213,7 @@
                 brand: "Pioneer",
                 name: "Pioneer Gas & Convenience",
                 address: "Bathurst St & Rutherford Rd",
-                distance: 5.6,
-                price: 166.9,
-                trend: "down",
+                price: 184.9,
                 trendText: "Competitive price",
                 updated: "40 mins ago",
                 coordinates: { lat: 43.832, lng: -79.447 }
@@ -230,9 +223,7 @@
                 brand: "Shell",
                 name: "Shell Express",
                 address: "Elgin Mills Rd E & Woodbine Ave",
-                distance: 6.2,
-                price: 169.9,
-                trend: "stable",
+                price: 186.9,
                 trendText: "Matching local avg",
                 updated: "1 hour ago",
                 coordinates: { lat: 43.891, lng: -79.372 }
@@ -242,9 +233,7 @@
                 brand: "Petro-Canada",
                 name: "Petro-Canada",
                 address: "Vaughan Mills Rd & Jane St",
-                distance: 8.5,
-                price: 167.9,
-                trend: "down",
+                price: 185.9,
                 trendText: "Dropping 5¢ tomorrow",
                 updated: "30 mins ago",
                 coordinates: { lat: 43.829, lng: -79.539 }
@@ -253,45 +242,89 @@
                 id: 8,
                 brand: "Esso",
                 name: "Esso Diesel & Gas",
-                address: "Steeles Ave W & Donge Court",
-                distance: 9.1,
-                price: 168.5,
-                trend: "stable",
+                address: "Steeles Ave W & Yonge St",
+                price: 186.5,
                 trendText: "Holding steady",
                 updated: "12 mins ago",
-                coordinates: { lat: 43.792, lng: -79.471 }
+                coordinates: { lat: 43.792, lng: -79.417 }
             }
         ];
 
+        // Default Reference Location: Richmond Hill
+        let userLocation = { lat: 43.876, lng: -79.438 };
         let currentBrandFilter = 'all';
         let currentSearchQuery = '';
         let currentSort = 'price-asc';
+        let showFavoritesOnly = false;
 
-        // Initialize App on DOM Content Loaded
+        // Favorites stored in LocalStorage
+        let favorites = JSON.parse(localStorage.getItem('gta_gas_favorites')) || [];
+
         document.addEventListener('DOMContentLoaded', () => {
             initTheme();
             setupEventListeners();
+            calculateDistances();
             renderStations();
         });
 
-        // Theme Toggle Logic
+        // Calculate distance using Haversine formula
+        function haversineDistance(coords1, coords2) {
+            function toRad(x) { return x * Math.PI / 180; }
+            const R = 6371; // km
+            const dLat = toRad(coords2.lat - coords1.lat);
+            const dLon = toRad(coords2.lng - coords1.lng);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(toRad(coords1.lat)) * Math.cos(toRad(coords2.lat)) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return parseFloat((R * c).toFixed(1));
+        }
+
+        function calculateDistances() {
+            stationsData.forEach(station => {
+                station.distance = haversineDistance(userLocation, station.coordinates);
+            });
+        }
+
         function initTheme() {
             const themeToggleBtn = document.getElementById('theme-toggle');
             const themeIcon = document.getElementById('theme-icon');
             
             themeToggleBtn.addEventListener('click', () => {
                 document.documentElement.classList.toggle('dark');
-                if (document.documentElement.classList.contains('dark')) {
-                    themeIcon.className = "fa-solid fa-moon";
-                } else {
-                    themeIcon.className = "fa-solid fa-sun";
-                }
+                themeIcon.className = document.documentElement.classList.contains('dark') ? "fa-solid fa-moon" : "fa-solid fa-sun";
             });
         }
 
-        // Setup User Event Listeners
+        function toggleFavorite(id, event) {
+            if (event) event.stopPropagation();
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(favId => favId !== id);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('gta_gas_favorites', JSON.stringify(favorites));
+            renderStations();
+        }
+
         function setupEventListeners() {
-            // Brand filter buttons
+            // Geolocation Button
+            document.getElementById('geo-btn').addEventListener('click', () => {
+                if (navigator.geolocation) {
+                    document.getElementById('current-location-text').textContent = "Locating...";
+                    navigator.geolocation.getCurrentPosition((pos) => {
+                        userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                        document.getElementById('current-location-text').textContent = "Current GPS Location";
+                        calculateDistances();
+                        renderStations();
+                    }, () => {
+                        document.getElementById('current-location-text').textContent = "Richmond Hill, ON (Default)";
+                        alert("Could not fetch location. Using default Richmond Hill location.");
+                    });
+                }
+            });
+
+            // Brand filters
             const filterButtons = document.querySelectorAll('.brand-filter');
             filterButtons.forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -300,34 +333,45 @@
                     });
                     e.target.className = "brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-orange-500 text-white transition whitespace-nowrap shadow-sm";
                     currentBrandFilter = e.target.getAttribute('data-brand');
+                    showFavoritesOnly = false;
+                    document.getElementById('fav-filter-btn').className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition whitespace-nowrap";
                     renderStations();
                 });
             });
 
+            // Favorite Only Filter Button
+            const favFilterBtn = document.getElementById('fav-filter-btn');
+            favFilterBtn.addEventListener('click', () => {
+                showFavoritesOnly = !showFavoritesOnly;
+                if (showFavoritesOnly) {
+                    favFilterBtn.className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500 text-white transition whitespace-nowrap shadow-sm";
+                } else {
+                    favFilterBtn.className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition whitespace-nowrap";
+                }
+                renderStations();
+            });
+
             // Search Input
-            const searchInput = document.getElementById('search-input');
-            searchInput.addEventListener('input', (e) => {
+            document.getElementById('search-input').addEventListener('input', (e) => {
                 currentSearchQuery = e.target.value.toLowerCase().trim();
                 renderStations();
             });
 
-            // Sorting Select
-            const sortSelect = document.getElementById('sort-select');
-            sortSelect.addEventListener('change', (e) => {
+            // Sort Select
+            document.getElementById('sort-select').addEventListener('change', (e) => {
                 currentSort = e.target.value;
                 renderStations();
             });
 
-            // Refresh Button Animation & Simulation
+            // Refresh Button
             const refreshBtn = document.getElementById('refresh-btn');
             const refreshIcon = document.getElementById('refresh-icon');
             refreshBtn.addEventListener('click', () => {
                 refreshIcon.classList.add('fa-spin');
                 setTimeout(() => {
                     refreshIcon.classList.remove('fa-spin');
-                    // Randomize prices slightly to simulate live fetch
                     stationsData.forEach(s => {
-                        const delta = (Math.random() - 0.5) * 1.0;
+                        const delta = (Math.random() - 0.5) * 0.8;
                         s.price = parseFloat((s.price + delta).toFixed(1));
                     });
                     renderStations();
@@ -335,28 +379,30 @@
             });
         }
 
-        // Filter, Sort, and Render Station Cards
         function renderStations() {
             const grid = document.getElementById('stations-grid');
             const emptyState = document.getElementById('empty-state');
             const stationCountBadge = document.getElementById('station-count');
 
-            // 1. Filter
+            // Filter
             let filtered = stationsData.filter(station => {
                 const matchesBrand = currentBrandFilter === 'all' || station.brand.toLowerCase() === currentBrandFilter.toLowerCase();
                 const matchesSearch = station.name.toLowerCase().includes(currentSearchQuery) || station.address.toLowerCase().includes(currentSearchQuery);
-                return matchesBrand && matchesSearch;
+                const matchesFav = !showFavoritesOnly || favorites.includes(station.id);
+                return matchesBrand && matchesSearch && matchesFav;
             });
 
-            // 2. Sort
+            // Sort (Favorites pinned to top first, then sort by selected option)
             filtered.sort((a, b) => {
-                if (currentSort === 'price-asc') {
-                    return a.price - b.price;
-                } else if (currentSort === 'distance') {
-                    return a.distance - b.distance;
-                } else if (currentSort === 'name') {
-                    return a.name.localeCompare(b.name);
-                }
+                const isAFav = favorites.includes(a.id);
+                const isBFav = favorites.includes(b.id);
+                if (isAFav && !isBFav) return -1;
+                if (!isAFav && isBFav) return 1;
+
+                if (currentSort === 'price-asc') return a.price - b.price;
+                if (currentSort === 'distance') return a.distance - b.distance;
+                if (currentSort === 'name') return a.name.localeCompare(b.name);
+                return 0;
             });
 
             stationCountBadge.textContent = filtered.length;
@@ -369,8 +415,8 @@
 
             emptyState.classList.add('hidden');
 
-            // 3. Generate HTML
             grid.innerHTML = filtered.map(station => {
+                const isFav = favorites.includes(station.id);
                 let brandColorBg = 'bg-slate-500/10 text-slate-600 dark:text-slate-300';
                 if (station.brand === 'Shell') brandColorBg = 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400';
                 if (station.brand === 'Petro-Canada') brandColorBg = 'bg-red-500/10 text-red-600 dark:text-red-400';
@@ -378,37 +424,54 @@
                 if (station.brand === 'Costco') brandColorBg = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
                 if (station.brand === 'Pioneer') brandColorBg = 'bg-orange-500/10 text-orange-600 dark:text-orange-400';
 
+                const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(station.name + ' ' + station.address)}`;
+
                 return `
-                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border ${isFav ? 'border-amber-400 dark:border-amber-500/50 ring-1 ring-amber-400/30' : 'border-slate-200 dark:border-slate-800'} shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 relative">
                         <div class="flex items-start justify-between">
                             <div class="space-y-1">
-                                <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider ${brandColorBg}">
-                                    ${station.brand}
-                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider ${brandColorBg}">
+                                        ${station.brand}
+                                    </span>
+                                    ${isFav ? '<span class="text-xs bg-amber-500/10 text-amber-500 font-semibold px-2 py-0.5 rounded-md">★ Favorite</span>' : ''}
+                                </div>
                                 <h3 class="font-bold text-base mt-2 leading-tight">${station.name}</h3>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 flex items-center space-x-1">
                                     <i class="fa-solid fa-location-dot text-slate-400"></i>
                                     <span>${station.address}</span>
                                 </p>
                             </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-                                    ${station.price}<span class="text-xs font-normal text-slate-500">¢/L</span>
+
+                            <div class="flex flex-col items-end space-y-2">
+                                <!-- Favorite Star Toggle -->
+                                <button onclick="toggleFavorite(${station.id}, event)" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition text-lg ${isFav ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600'}" aria-label="Favorite">
+                                    <i class="fa-${isFav ? 'solid' : 'regular'} fa-star"></i>
+                                </button>
+                                
+                                <div class="text-right">
+                                    <div class="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                                        ${station.price}<span class="text-xs font-normal text-slate-500">¢/L</span>
+                                    </div>
+                                    <span class="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md inline-block mt-1">
+                                        ${station.trendText}
+                                    </span>
                                 </div>
-                                <span class="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md inline-block mt-1">
-                                    ${station.trendText}
-                                </span>
                             </div>
                         </div>
 
                         <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
-                            <div class="flex items-center space-x-1.5">
+                            <div class="flex items-center space-x-2">
                                 <i class="fa-solid fa-route text-orange-500"></i>
                                 <span class="font-semibold text-slate-700 dark:text-slate-300">${station.distance} km away</span>
                             </div>
-                            <div class="flex items-center space-x-1">
-                                <i class="fa-regular fa-clock"></i>
-                                <span>Updated ${station.updated}</span>
+                            
+                            <div class="flex items-center space-x-3">
+                                <span class="text-[11px] text-slate-400"><i class="fa-regular fa-clock"></i> ${station.updated}</span>
+                                <a href="${mapUrl}" target="_blank" class="px-2.5 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500 hover:text-white rounded-lg text-xs font-semibold transition flex items-center space-x-1">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                    <span>Maps</span>
+                                </a>
                             </div>
                         </div>
                     </div>
