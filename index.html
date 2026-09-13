@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA Gas Price Tracker & Tomorrow's Forecast</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brandDark: '#0f172a',
+                        cardDark: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-300">
+
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-orange-500/10 dark:bg-orange-500/20 flex items-center justify-center text-orange-600 dark:text-orange-400">
+                    <i class="fa-solid fa-gas-pump text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">GTA GasRadar</h1>
+                    <div class="flex items-center text-xs text-slate-500 dark:text-slate-400 space-x-1">
+                        <i class="fa-solid fa-location-dot text-orange-500"></i>
+                        <span id="current-location-text">Richmond Hill, ON</span>
+                        <span class="text-slate-300 dark:text-slate-700">•</span>
+                        <span class="text-emerald-600 dark:text-emerald-400 font-medium">Live Market</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" aria-label="Toggle Theme">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i>
+                </button>
+                <!-- Refresh Button -->
+                <button id="refresh-btn" class="p-2.5 rounded-xl bg-orange-500 text-white hover:bg-orange-600 transition flex items-center space-x-1 text-sm font-medium px-3 shadow-lg shadow-orange-500/20">
+                    <i id="refresh-icon" class="fa-solid fa-rotate"></i>
+                    <span class="hidden sm:inline">Refresh</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        
+        <!-- Tomorrow's Forecast & Recommendation Banner -->
+        <section id="forecast-banner" class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-800 text-white p-6 shadow-xl shadow-emerald-900/10">
+            <div class="absolute -right-6 -bottom-6 opacity-10 text-9xl">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+            
+            <div class="relative z-10">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider">
+                            GTA Market Outlook
+                        </span>
+                        <span class="text-xs text-emerald-100" id="forecast-date">Updated 20 mins ago</span>
+                    </div>
+                    <div id="recommendation-badge" class="px-4 py-1.5 bg-white text-emerald-800 font-bold rounded-full text-sm shadow-md flex items-center space-x-2">
+                        <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                        <span>WAIT UNTIL TOMORROW</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <div>
+                        <p class="text-xs text-emerald-100 uppercase tracking-wider font-medium">Tomorrow's Prediction</p>
+                        <div class="flex items-baseline space-x-2 mt-1">
+                            <span class="text-4xl font-extrabold tracking-tight" id="tomorrow-price">163.9¢</span>
+                            <span class="text-emerald-200 text-sm font-semibold" id="price-delta">▼ Drop of 5.0¢</span>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2 border-t md:border-t-0 md:border-l border-white/20 pt-4 md:pt-0 md:pl-6">
+                        <p class="text-sm leading-relaxed text-emerald-50" id="forecast-summary">
+                            Wholesale prices in southern Ontario are trending downward tonight. En-Pro reports indicate a 5.0¢ drop expected across Toronto and York Region tomorrow morning. Hold off filling up if you can!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search, Filters, and Sorting Toolbar -->
+        <section class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                
+                <!-- Search input -->
+                <div class="relative w-full md:w-72">
+                    <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-slate-400"></i>
+                    <input type="text" id="search-input" placeholder="Search station or cross street..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-sm focus:ring-2 focus:ring-orange-500 outline-none transition">
+                </div>
+
+                <!-- Brand Filter Pills -->
+                <div id="brand-filters" class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
+                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-orange-500 text-white transition whitespace-nowrap shadow-sm" data-brand="all">All Brands</button>
+                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Shell">Shell</button>
+                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Petro-Canada">Petro-Canada</button>
+                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Esso">Esso</button>
+                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Costco">Costco</button>
+                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Pioneer">Pioneer</button>
+                </div>
+
+                <!-- Sorting Dropdown -->
+                <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
+                    <span class="text-xs text-slate-500 whitespace-nowrap">Sort by:</span>
+                    <select id="sort-select" class="px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-xs font-semibold focus:ring-2 focus:ring-orange-500 outline-none transition cursor-pointer">
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="distance">Distance: Nearest</option>
+                        <option value="name">Station Name</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-bold text-lg">Nearby Stations (<span id="station-count">0</span>)</h2>
+                <span class="text-xs text-slate-500">Prices in cents per litre (¢/L)</span>
+            </div>
+
+            <!-- Stations Grid -->
+            <div id="stations-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Dynamically populated via JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 mt-4">
+                <div class="w-16 h-16 bg-orange-500/10 text-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 class="font-bold text-base mb-1">No stations found</h3>
+                <p class="text-xs text-slate-500 max-w-xs mx-auto">Try adjusting your brand filters or search criteria to locate stations in the GTA.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="max-w-5xl mx-auto px-4 py-8 mt-12 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 space-y-2">
+        <p>GTA GasRadar • Real-time crowd-sourced and regional market indicators for Toronto & York Region.</p>
+        <p class="text-slate-400">Data reflects regular unleaded fuel. Prices subject to change without notice.</p>
+    </footer>
+
+    <script>
+        // Mock dataset of GTA Gas Stations
+        const stationsData = [
+            {
+                id: 1,
+                brand: "Costco",
+                name: "Costco Wholesale Gas",
+                address: "Woodbridge (Hwy 7 / Weston Rd)",
+                distance: 3.2,
+                price: 158.9,
+                trend: "down",
+                trendText: "Falling fast",
+                updated: "10 mins ago",
+                coordinates: { lat: 43.785, lng: -79.542 }
+            },
+            {
+                id: 2,
+                brand: "Shell",
+                name: "Shell Richmond Hill North",
+                address: "Yonge St & Major MacKenzie Dr",
+                distance: 1.1,
+                price: 168.9,
+                trend: "stable",
+                trendText: "Steady today",
+                updated: "5 mins ago",
+                coordinates: { lat: 43.876, lng: -79.438 }
+            },
+            {
+                id: 3,
+                brand: "Petro-Canada",
+                name: "Petro-Canada SuperStation",
+                address: "Bayview Ave & 16th Ave",
+                distance: 2.4,
+                price: 169.3,
+                trend: "down",
+                trendText: "Expected drop tonight",
+                updated: "25 mins ago",
+                coordinates: { lat: 43.851, lng: -79.390 }
+            },
+            {
+                id: 4,
+                brand: "Esso",
+                name: "Esso On-The-Run",
+                address: "Hwy 7 & Leslie St, Markham",
+                distance: 4.8,
+                price: 167.5,
+                trend: "down",
+                trendText: "Dropping soon",
+                updated: "15 mins ago",
+                coordinates: { lat: 43.839, lng: -79.378 }
+            },
+            {
+                id: 5,
+                brand: "Pioneer",
+                name: "Pioneer Gas & Convenience",
+                address: "Bathurst St & Rutherford Rd",
+                distance: 5.6,
+                price: 166.9,
+                trend: "down",
+                trendText: "Competitive price",
+                updated: "40 mins ago",
+                coordinates: { lat: 43.832, lng: -79.447 }
+            },
+            {
+                id: 6,
+                brand: "Shell",
+                name: "Shell Express",
+                address: "Elgin Mills Rd E & Woodbine Ave",
+                distance: 6.2,
+                price: 169.9,
+                trend: "stable",
+                trendText: "Matching local avg",
+                updated: "1 hour ago",
+                coordinates: { lat: 43.891, lng: -79.372 }
+            },
+            {
+                id: 7,
+                brand: "Petro-Canada",
+                name: "Petro-Canada",
+                address: "Vaughan Mills Rd & Jane St",
+                distance: 8.5,
+                price: 167.9,
+                trend: "down",
+                trendText: "Dropping 5¢ tomorrow",
+                updated: "30 mins ago",
+                coordinates: { lat: 43.829, lng: -79.539 }
+            },
+            {
+                id: 8,
+                brand: "Esso",
+                name: "Esso Diesel & Gas",
+                address: "Steeles Ave W & Donge Court",
+                distance: 9.1,
+                price: 168.5,
+                trend: "stable",
+                trendText: "Holding steady",
+                updated: "12 mins ago",
+                coordinates: { lat: 43.792, lng: -79.471 }
+            }
+        ];
+
+        let currentBrandFilter = 'all';
+        let currentSearchQuery = '';
+        let currentSort = 'price-asc';
+
+        // Initialize App on DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            setupEventListeners();
+            renderStations();
+        });
+
+        // Theme Toggle Logic
+        function initTheme() {
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            themeToggleBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                if (document.documentElement.classList.contains('dark')) {
+                    themeIcon.className = "fa-solid fa-moon";
+                } else {
+                    themeIcon.className = "fa-solid fa-sun";
+                }
+            });
+        }
+
+        // Setup User Event Listeners
+        function setupEventListeners() {
+            // Brand filter buttons
+            const filterButtons = document.querySelectorAll('.brand-filter');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    filterButtons.forEach(b => {
+                        b.className = "brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap";
+                    });
+                    e.target.className = "brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-orange-500 text-white transition whitespace-nowrap shadow-sm";
+                    currentBrandFilter = e.target.getAttribute('data-brand');
+                    renderStations();
+                });
+            });
+
+            // Search Input
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', (e) => {
+                currentSearchQuery = e.target.value.toLowerCase().trim();
+                renderStations();
+            });
+
+            // Sorting Select
+            const sortSelect = document.getElementById('sort-select');
+            sortSelect.addEventListener('change', (e) => {
+                currentSort = e.target.value;
+                renderStations();
+            });
+
+            // Refresh Button Animation & Simulation
+            const refreshBtn = document.getElementById('refresh-btn');
+            const refreshIcon = document.getElementById('refresh-icon');
+            refreshBtn.addEventListener('click', () => {
+                refreshIcon.classList.add('fa-spin');
+                setTimeout(() => {
+                    refreshIcon.classList.remove('fa-spin');
+                    // Randomize prices slightly to simulate live fetch
+                    stationsData.forEach(s => {
+                        const delta = (Math.random() - 0.5) * 1.0;
+                        s.price = parseFloat((s.price + delta).toFixed(1));
+                    });
+                    renderStations();
+                }, 800);
+            });
+        }
+
+        // Filter, Sort, and Render Station Cards
+        function renderStations() {
+            const grid = document.getElementById('stations-grid');
+            const emptyState = document.getElementById('empty-state');
+            const stationCountBadge = document.getElementById('station-count');
+
+            // 1. Filter
+            let filtered = stationsData.filter(station => {
+                const matchesBrand = currentBrandFilter === 'all' || station.brand.toLowerCase() === currentBrandFilter.toLowerCase();
+                const matchesSearch = station.name.toLowerCase().includes(currentSearchQuery) || station.address.toLowerCase().includes(currentSearchQuery);
+                return matchesBrand && matchesSearch;
+            });
+
+            // 2. Sort
+            filtered.sort((a, b) => {
+                if (currentSort === 'price-asc') {
+                    return a.price - b.price;
+                } else if (currentSort === 'distance') {
+                    return a.distance - b.distance;
+                } else if (currentSort === 'name') {
+                    return a.name.localeCompare(b.name);
+                }
+            });
+
+            stationCountBadge.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            // 3. Generate HTML
+            grid.innerHTML = filtered.map(station => {
+                let brandColorBg = 'bg-slate-500/10 text-slate-600 dark:text-slate-300';
+                if (station.brand === 'Shell') brandColorBg = 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400';
+                if (station.brand === 'Petro-Canada') brandColorBg = 'bg-red-500/10 text-red-600 dark:text-red-400';
+                if (station.brand === 'Esso') brandColorBg = 'bg-blue-500/10 text-blue-600 dark:text-blue-400';
+                if (station.brand === 'Costco') brandColorBg = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
+                if (station.brand === 'Pioneer') brandColorBg = 'bg-orange-500/10 text-orange-600 dark:text-orange-400';
+
+                return `
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+                        <div class="flex items-start justify-between">
+                            <div class="space-y-1">
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider ${brandColorBg}">
+                                    ${station.brand}
+                                </span>
+                                <h3 class="font-bold text-base mt-2 leading-tight">${station.name}</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 flex items-center space-x-1">
+                                    <i class="fa-solid fa-location-dot text-slate-400"></i>
+                                    <span>${station.address}</span>
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                                    ${station.price}<span class="text-xs font-normal text-slate-500">¢/L</span>
+                                </div>
+                                <span class="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md inline-block mt-1">
+                                    ${station.trendText}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+                            <div class="flex items-center space-x-1.5">
+                                <i class="fa-solid fa-route text-orange-500"></i>
+                                <span class="font-semibold text-slate-700 dark:text-slate-300">${station.distance} km away</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <i class="fa-regular fa-clock"></i>
+                                <span>Updated ${station.updated}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
