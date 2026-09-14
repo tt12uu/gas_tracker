@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests supabase py-gasbuddy aiohttp backoff
+          pip install requests supabase py-gasbuddy aiohttp backoff aiofiles
 
       - name: Run sync script
         run: python sync_ontario_stations.py
