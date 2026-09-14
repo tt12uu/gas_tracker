@@ -42,27 +42,16 @@
                     <div class="flex items-center text-xs text-slate-500 dark:text-slate-400 space-x-1">
                         <i class="fa-solid fa-location-dot text-orange-500"></i>
                         <span id="current-location-text">All Ontario Coverage</span>
-                        <button id="geo-btn" class="ml-1 text-[10px] text-orange-500 hover:underline font-medium">(Use My Location)</button>
                         <span class="text-slate-300 dark:text-slate-700">•</span>
-                        <span class="text-emerald-600 dark:text-emerald-400 font-medium">Auto-Sync Enabled</span>
+                        <span class="text-emerald-600 dark:text-emerald-400 font-medium">Lazy Render Active</span>
                     </div>
                 </div>
             </div>
 
             <div class="flex items-center space-x-2">
-                <!-- Auto Sync Status Badge -->
-                <div class="hidden md:flex items-center space-x-1.5 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs text-slate-500">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>Live Auto-Update</span>
-                </div>
                 <!-- Theme Toggle Button -->
                 <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" aria-label="Toggle Theme">
                     <i id="theme-icon" class="fa-solid fa-moon"></i>
-                </button>
-                <!-- Refresh Button -->
-                <button id="refresh-btn" class="p-2.5 rounded-xl bg-orange-500 text-white hover:bg-orange-600 transition flex items-center space-x-1 text-sm font-medium px-3 shadow-lg shadow-orange-500/20">
-                    <i id="refresh-icon" class="fa-solid fa-rotate"></i>
-                    <span class="hidden sm:inline">Refresh</span>
                 </button>
             </div>
         </div>
@@ -117,26 +106,30 @@
                 <!-- Search input -->
                 <div class="relative w-full md:w-80">
                     <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-slate-400"></i>
-                    <input type="text" id="search-input" placeholder="Search city (e.g. Markham, Ottawa, London)..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-sm focus:ring-2 focus:ring-orange-500 outline-none transition">
+                    <input type="text" id="search-input" placeholder="Search station or city..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-sm focus:ring-2 focus:ring-orange-500 outline-none transition dark:text-white">
                 </div>
 
-                <!-- Brand Filter Pills -->
-                <div id="brand-filters" class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
-                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-orange-500 text-white transition whitespace-nowrap shadow-sm" data-brand="all">All Brands</button>
-                    <button id="fav-filter-btn" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition whitespace-nowrap">★ Favorites</button>
-                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Shell">Shell</button>
-                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Petro-Canada">Petro-Canada</button>
-                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Esso">Esso</button>
-                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Costco">Costco</button>
-                    <button class="brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap" data-brand="Pioneer">Pioneer</button>
-                </div>
+                <!-- Filters & Sorting -->
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <!-- Brand Filter Select -->
+                    <select id="brand-select" class="px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-xs font-semibold focus:ring-2 focus:ring-orange-500 outline-none transition cursor-pointer dark:text-white">
+                        <option value="all">All Brands</option>
+                        <option value="shell">Shell</option>
+                        <option value="petro-canada">Petro-Canada</option>
+                        <option value="esso">Esso</option>
+                        <option value="costco">Costco</option>
+                        <option value="pioneer">Pioneer</option>
+                    </select>
 
-                <!-- Sorting Dropdown -->
-                <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
-                    <span class="text-xs text-slate-500 whitespace-nowrap">Sort:</span>
-                    <select id="sort-select" class="px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-xs font-semibold focus:ring-2 focus:ring-orange-500 outline-none transition cursor-pointer">
-                        <option value="distance">Distance: Nearest</option>
-                        <option value="price-asc">Price: Low to High</option>
+                    <!-- Favorites Toggle Button -->
+                    <button id="fav-toggle-btn" class="px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-amber-500 hover:text-white transition whitespace-nowrap">
+                        ★ Favorites
+                    </button>
+
+                    <!-- Sort Select -->
+                    <select id="sort-select" class="px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-xs font-semibold focus:ring-2 focus:ring-orange-500 outline-none transition cursor-pointer dark:text-white">
+                        <option value="distance">Nearest Distance</option>
+                        <option value="price">Lowest Price</option>
                         <option value="name">Station Name</option>
                     </select>
                 </div>
@@ -144,393 +137,32 @@
         </section>
 
         <section>
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="font-bold text-lg">Ontario Gas Stations (<span id="station-count">0</span>)</h2>
-                <span class="text-xs text-slate-500" id="last-update-time">Auto-refresh active</span>
-            </div>
-
             <!-- Loading Spinner -->
             <div id="loading-spinner" class="text-center py-16">
                 <i class="fa-solid fa-spinner fa-spin text-orange-500 text-4xl mb-3"></i>
-                <p class="text-base font-semibold">Scanning 1,000+ Gas Stations across Ontario...</p>
-                <p class="text-xs text-slate-400 mt-1">Fetching live OpenStreetMap nodes & GPS coordinates</p>
+                <p class="text-base font-semibold">Loading Ontario Stations...</p>
             </div>
 
-            <!-- Stations Grid -->
-            <div id="stations-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Dynamically populated via JS -->
-            </div>
-
-            <!-- Empty State -->
-            <div id="empty-state" class="hidden text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 mt-4">
-                <div class="w-16 h-16 bg-orange-500/10 text-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-                <h3 class="font-bold text-base mb-1">No stations match your criteria</h3>
-                <p class="text-xs text-slate-500 max-w-xs mx-auto">Try typing a different city or clearing your search filter.</p>
+            <!-- Stations Container (Lazy Loaded by app.js) -->
+            <div id="stations-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Chunked Card Elements will render here -->
             </div>
         </section>
 
     </main>
 
-    <footer class="max-w-7xl mx-auto px-4 py-8 mt-12 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 space-y-2">
-        <p>Ontario GasRadar • Real-time OpenStreetMap nodes across Southern & Central Ontario.</p>
-        <p class="text-slate-400">Prices reflect estimated regular unleaded fuel across Ontario. Subject to change.</p>
-    </footer>
-
+    <!-- Simple Dark Mode Script -->
     <script>
-        // Supabase Client
-        const SUPABASE_URL = 'https://vphfmrejzflnmcvjmgtu.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_fgHKnLnNNwIN-yq9AlU5wA_5TBJfJP2';
-        let supabaseClient = null;
-        if (SUPABASE_URL.includes('YOUR_PROJECT_ID') === false && typeof supabase !== 'undefined') {
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        }
-
-        // Location: Default GTA / Richmond Hill
-        let userLocation = { lat: 43.876, lng: -79.438 };
-        let loadedStations = [];
-        let currentBrandFilter = 'all';
-        let currentSearchQuery = '';
-        let currentSort = 'distance';
-        let showFavoritesOnly = false;
-        let autoRefreshTimer = null;
-
-        // Favorites from LocalStorage
-        let favorites = JSON.parse(localStorage.getItem('gta_gas_favorites')) || [];
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initTheme();
-            setupEventListeners();
-            loadOntarioStations(userLocation.lat, userLocation.lng);
-
-            // Auto-Refresh Every 5 Minutes (300,000 ms)
-            autoRefreshTimer = setInterval(() => {
-                console.log("⏰ [Auto-Sync] 觸發 5 分鐘自動刷新...");
-                loadOntarioStations(userLocation.lat, userLocation.lng, true);
-            }, 300000);
+        document.getElementById('theme-toggle')?.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            if (icon) {
+                icon.className = document.documentElement.classList.contains('dark') ? "fa-solid fa-moon" : "fa-solid fa-sun";
+            }
         });
-
-        // Haversine Distance Calculation (km)
-        function haversineDistance(coords1, coords2) {
-            function toRad(x) { return x * Math.PI / 180; }
-            const R = 6371;
-            const dLat = toRad(coords2.lat - coords1.lat);
-            const dLon = toRad(coords2.lng - coords1.lng);
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                      Math.cos(toRad(coords1.lat)) * Math.cos(toRad(coords2.lat)) *
-                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return parseFloat((R * c).toFixed(1));
-        }
-
-        // Load Gas Stations Across Entire Ontario Bounding Box
-        async function loadOntarioStations(lat, lng, isBackground = false) {
-            console.log("==========================================");
-            console.log(`🚀 [GasRadar] 正在加載全安省油站 (座標: ${lat}, ${lng})...`);
-
-            if (!isBackground) {
-                document.getElementById('loading-spinner').classList.remove('hidden');
-                document.getElementById('stations-grid').innerHTML = '';
-            }
-            document.getElementById('empty-state').classList.add('hidden');
-
-            // 1. Try Supabase First
-            if (supabaseClient) {
-                try {
-                    let { data: dbStations, error } = await supabaseClient.from('stations').select('*');
-                    
-                    if (!error && dbStations && dbStations.length >= 10) {
-                        console.log(`✅ [Supabase DB] 成功從 Supabase 取得 ${dbStations.length} 筆油站資料！`);
-                        
-                        loadedStations = dbStations.map(s => ({
-                            id: s.id,
-                            brand: normalizeBrand(s.brand || 'Independent'),
-                            name: s.name || 'Gas Station',
-                            address: s.address || 'Ontario, Canada',
-                            price: parseFloat(s.price) || 185.9,
-                            updated: s.updated_at ? new Date(s.updated_at).toLocaleTimeString() : "Live",
-                            coordinates: { lat: parseFloat(s.lat), lng: parseFloat(s.lng) },
-                            distance: haversineDistance({lat, lng}, {lat: parseFloat(s.lat), lng: parseFloat(s.lng)})
-                        }));
-                        
-                        finishLoading();
-                        return;
-                    } else {
-                        console.log(`ℹ️ [Supabase DB] Supabase 只有 ${dbStations ? dbStations.length : 0} 筆資料 (少於 10 筆)，自動切換至 OpenStreetMap 抓取全安省 1000+ 間油站...`);
-                    }
-                } catch (e) {
-                    console.error("❌ [Supabase DB] 讀取例外:", e);
-                }
-            }
-
-            // 2. OpenStreetMap Ontario Bounding Box (Southern/Central Ontario Bounding Box: 42.0,-83.5,46.5,-74.5)
-            // This bounding box covers Toronto, Ottawa, Mississauga, Brampton, Hamilton, London, Kitchener, Windsor, Barrie, Niagara, etc.
-            const ontarioBBox = "42.0,-83.5,46.5,-74.5";
-            const maxStations = 1200; // 抓取最多 1200 間油站
-            const overpassQuery = `[out:json][timeout:25];node["amenity"="fuel"](${ontarioBBox});out ${maxStations};`;
-            const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
-
-            try {
-                const response = await fetch(overpassUrl);
-                const data = await response.json();
-                
-                if (data && data.elements && data.elements.length > 0) {
-                    console.log(`🌐 [OpenStreetMap] 成功獲取全安省 ${data.elements.length} 間真實油站！`);
-                    
-                    loadedStations = data.elements.map((item, index) => {
-                        const brand = item.tags.brand || item.tags.name || "Independent";
-                        const street = item.tags["addr:street"] ? `${item.tags["addr:housenumber"] || ''} ${item.tags["addr:street"]}` : "Ontario Regional Rd";
-                        const city = item.tags["addr:city"] || getCityFromCoords(item.lat, item.lon);
-                        
-                        // 市場趨勢動態價格模擬 (根據品牌與地區微調)
-                        const basePrice = brand.toLowerCase().includes('costco') ? 175.9 : 185.9;
-                        const randomVariation = ((index % 11) * 0.3) - 1.2;
-                        const price = parseFloat((basePrice + randomVariation).toFixed(1));
-
-                        return {
-                            id: item.id || (index + 1000),
-                            brand: normalizeBrand(brand),
-                            name: item.tags.name || `${normalizeBrand(brand)} Gas Station`,
-                            address: `${street}, ${city}`,
-                            price: price,
-                            updated: "Just updated",
-                            coordinates: { lat: item.lat, lng: item.lon },
-                            distance: haversineDistance({lat, lng}, { lat: item.lat, lng: item.lon })
-                        };
-                    });
-                } else {
-                    console.warn("⚠️ Overpass API 未有回傳，載入擴展備用資料庫");
-                    loadedStations = getFallbackMockStations(lat, lng);
-                }
-            } catch (err) {
-                console.error("❌ Overpass API 請求超時，切換至備用資料庫:", err);
-                loadedStations = getFallbackMockStations(lat, lng);
-            }
-
-            finishLoading();
-        }
-
-        function finishLoading() {
-            document.getElementById('loading-spinner').classList.add('hidden');
-            const now = new Date();
-            document.getElementById('last-update-time').textContent = `Updated: ${now.toLocaleTimeString()}`;
-            renderStations();
-            console.log("==========================================");
-        }
-
-        function getCityFromCoords(lat, lng) {
-            if (lat > 45.3) return "Ottawa Region";
-            if (lat < 42.5 && lng < -82.5) return "Windsor / Essex";
-            if (lat < 43.1 && lng < -81.0) return "London / Elgin";
-            if (lat < 43.3 && lng < -79.7) return "Hamilton / Niagara";
-            if (lat > 44.2) return "Barrie / Simcoe";
-            if (lng > -79.0) return "Durham / Oshawa";
-            return "GTA / Ontario";
-        }
-
-        function normalizeBrand(rawBrand) {
-            const b = rawBrand.toLowerCase();
-            if (b.includes('shell')) return 'Shell';
-            if (b.includes('petro') || b.includes('petro-canada')) return 'Petro-Canada';
-            if (b.includes('esso')) return 'Esso';
-            if (b.includes('costco')) return 'Costco';
-            if (b.includes('pioneer')) return 'Pioneer';
-            if (b.includes('ultramar')) return 'Ultramar';
-            if (b.includes('canadian tire')) return 'Canadian Tire';
-            if (b.includes('circle k')) return 'Circle K';
-            if (b.includes('mobil')) return 'Mobil';
-            return rawBrand.length > 20 ? 'Independent' : rawBrand;
-        }
-
-        function getFallbackMockStations(lat, lng) {
-            const list = [
-                { id: 501, brand: "Costco", name: "Costco Woodbridge", address: "Hwy 7 & Weston Rd, Vaughan", price: 175.9, updated: "Live", coordinates: { lat: 43.7853, lng: -79.5421 } },
-                { id: 502, brand: "Shell", name: "Shell Richmond Hill", address: "Yonge St & Major Mac, Richmond Hill", price: 185.9, updated: "Live", coordinates: { lat: 43.8761, lng: -79.4382 } },
-                { id: 503, brand: "Petro-Canada", name: "Petro-Canada Markham", address: "Bayview Ave & 16th Ave, Markham", price: 185.9, updated: "Live", coordinates: { lat: 43.8512, lng: -79.3901 } },
-                { id: 504, brand: "Esso", name: "Esso Toronto Downtown", address: "Jarvis St & Lakeshore, Toronto", price: 187.9, updated: "Live", coordinates: { lat: 43.6451, lng: -79.3702 } }
-            ];
-            return list.map(s => ({ ...s, distance: haversineDistance({lat, lng}, s.coordinates) }));
-        }
-
-        function initTheme() {
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const themeIcon = document.getElementById('theme-icon');
-            themeToggleBtn.addEventListener('click', () => {
-                document.documentElement.classList.toggle('dark');
-                themeIcon.className = document.documentElement.classList.contains('dark') ? "fa-solid fa-moon" : "fa-solid fa-sun";
-            });
-        }
-
-        function toggleFavorite(id, event) {
-            if (event) event.stopPropagation();
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(favId => favId !== id);
-            } else {
-                favorites.push(id);
-            }
-            localStorage.setItem('gta_gas_favorites', JSON.stringify(favorites));
-            renderStations();
-        }
-
-        function setupEventListeners() {
-            // Geolocation Button
-            document.getElementById('geo-btn').addEventListener('click', () => {
-                if (navigator.geolocation) {
-                    document.getElementById('current-location-text').textContent = "Locating...";
-                    navigator.geolocation.getCurrentPosition((pos) => {
-                        userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                        document.getElementById('current-location-text').textContent = "Current GPS Location";
-                        loadOntarioStations(userLocation.lat, userLocation.lng);
-                    }, () => {
-                        document.getElementById('current-location-text').textContent = "Richmond Hill, ON (Default)";
-                        alert("Could not fetch GPS location. Showing Ontario stations.");
-                    });
-                }
-            });
-
-            // Brand filters
-            const filterButtons = document.querySelectorAll('.brand-filter');
-            filterButtons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    filterButtons.forEach(b => {
-                        b.className = "brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition whitespace-nowrap";
-                    });
-                    e.target.className = "brand-filter px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-orange-500 text-white transition whitespace-nowrap shadow-sm";
-                    currentBrandFilter = e.target.getAttribute('data-brand');
-                    showFavoritesOnly = false;
-                    document.getElementById('fav-filter-btn').className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition whitespace-nowrap";
-                    renderStations();
-                });
-            });
-
-            // Favorites Filter
-            const favFilterBtn = document.getElementById('fav-filter-btn');
-            favFilterBtn.addEventListener('click', () => {
-                showFavoritesOnly = !showFavoritesOnly;
-                favFilterBtn.className = showFavoritesOnly 
-                    ? "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500 text-white transition whitespace-nowrap shadow-sm"
-                    : "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition whitespace-nowrap";
-                renderStations();
-            });
-
-            // Search Input
-            document.getElementById('search-input').addEventListener('input', (e) => {
-                currentSearchQuery = e.target.value.toLowerCase().trim();
-                renderStations();
-            });
-
-            // Sort Dropdown
-            document.getElementById('sort-select').addEventListener('change', (e) => {
-                currentSort = e.target.value;
-                renderStations();
-            });
-
-            // Refresh Button
-            const refreshBtn = document.getElementById('refresh-btn');
-            const refreshIcon = document.getElementById('refresh-icon');
-            refreshBtn.addEventListener('click', () => {
-                refreshIcon.classList.add('fa-spin');
-                loadOntarioStations(userLocation.lat, userLocation.lng);
-                setTimeout(() => refreshIcon.classList.remove('fa-spin'), 800);
-            });
-        }
-
-        function renderStations() {
-            const grid = document.getElementById('stations-grid');
-            const emptyState = document.getElementById('empty-state');
-            const stationCountBadge = document.getElementById('station-count');
-
-            let filtered = loadedStations.filter(station => {
-                const matchesBrand = currentBrandFilter === 'all' || station.brand.toLowerCase() === currentBrandFilter.toLowerCase();
-                const matchesSearch = station.name.toLowerCase().includes(currentSearchQuery) || station.address.toLowerCase().includes(currentSearchQuery);
-                const matchesFav = !showFavoritesOnly || favorites.includes(station.id);
-                return matchesBrand && matchesSearch && matchesFav;
-            });
-
-            // Sort
-            filtered.sort((a, b) => {
-                const isAFav = favorites.includes(a.id);
-                const isBFav = favorites.includes(b.id);
-                if (isAFav && !isBFav) return -1;
-                if (!isAFav && isBFav) return 1;
-
-                if (currentSort === 'price-asc') return a.price - b.price;
-                if (currentSort === 'distance') return a.distance - b.distance;
-                if (currentSort === 'name') return a.name.localeCompare(b.name);
-                return 0;
-            });
-
-            stationCountBadge.textContent = filtered.length;
-
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            }
-
-            emptyState.classList.add('hidden');
-
-            grid.innerHTML = filtered.map(station => {
-                const isFav = favorites.includes(station.id);
-                let brandColorBg = 'bg-slate-500/10 text-slate-600 dark:text-slate-300';
-                if (station.brand === 'Shell') brandColorBg = 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400';
-                if (station.brand === 'Petro-Canada') brandColorBg = 'bg-red-500/10 text-red-600 dark:text-red-400';
-                if (station.brand === 'Esso') brandColorBg = 'bg-blue-500/10 text-blue-600 dark:text-blue-400';
-                if (station.brand === 'Costco') brandColorBg = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
-                if (station.brand === 'Pioneer') brandColorBg = 'bg-orange-500/10 text-orange-600 dark:text-orange-400';
-
-                // 修正：使用精確 WGS84 經緯度直接生成 Google Maps 導航連結
-                const mapUrl = `https://www.google.com/maps?q=${station.coordinates.lat},${station.coordinates.lng}`;
-
-                return `
-                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border ${isFav ? 'border-amber-400 dark:border-amber-500/50 ring-1 ring-amber-400/30' : 'border-slate-200 dark:border-slate-800'} shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 relative">
-                        <div class="flex items-start justify-between">
-                            <div class="space-y-1">
-                                <div class="flex items-center space-x-2">
-                                    <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider ${brandColorBg}">
-                                        ${station.brand}
-                                    </span>
-                                    ${isFav ? '<span class="text-xs bg-amber-500/10 text-amber-500 font-semibold px-2 py-0.5 rounded-md">★ Favorite</span>' : ''}
-                                </div>
-                                <h3 class="font-bold text-base mt-2 leading-tight">${station.name}</h3>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 flex items-center space-x-1">
-                                    <i class="fa-solid fa-location-dot text-slate-400"></i>
-                                    <span>${station.address}</span>
-                                </p>
-                            </div>
-
-                            <div class="flex flex-col items-end space-y-2">
-                                <button onclick="toggleFavorite(${station.id}, event)" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition text-lg ${isFav ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600'}" aria-label="Favorite">
-                                    <i class="fa-${isFav ? 'solid' : 'regular'} fa-star"></i>
-                                </button>
-                                
-                                <div class="text-right">
-                                    <div class="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-                                        ${station.price}<span class="text-xs font-normal text-slate-500">¢/L</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
-                            <div class="flex items-center space-x-2">
-                                <i class="fa-solid fa-route text-orange-500"></i>
-                                <span class="font-semibold text-slate-700 dark:text-slate-300">${station.distance} km away</span>
-                            </div>
-                            
-                            <div class="flex items-center space-x-3">
-                                <span class="text-[11px] text-slate-400"><i class="fa-regular fa-clock"></i> ${station.updated}</span>
-                                <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500 hover:text-white rounded-lg text-xs font-semibold transition flex items-center space-x-1">
-                                    <i class="fa-solid fa-map-location-dot"></i>
-                                    <span>Maps</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
     </script>
+
+    <!-- Main JS Bundle -->
+    <script src="app.js" defer></script>
 </body>
 </html>
