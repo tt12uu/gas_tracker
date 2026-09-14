@@ -49,7 +49,6 @@
             </div>
 
             <div class="flex items-center space-x-2">
-                <!-- Theme Toggle Button -->
                 <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" aria-label="Toggle Theme">
                     <i id="theme-icon" class="fa-solid fa-moon"></i>
                 </button>
@@ -59,7 +58,7 @@
 
     <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
         
-        <!-- Tomorrow's Forecast & Recommendation Banner -->
+        <!-- Tomorrow's Forecast Banner -->
         <section id="forecast-banner" class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-800 text-white p-6 shadow-xl shadow-emerald-900/10">
             <div class="absolute -right-6 -bottom-6 opacity-10 text-9xl">
                 <i class="fa-solid fa-chart-line"></i>
@@ -103,15 +102,12 @@
         <section class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
             <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
                 
-                <!-- Search input -->
                 <div class="relative w-full md:w-80">
                     <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-slate-400"></i>
                     <input type="text" id="search-input" placeholder="Search station or city..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-sm focus:ring-2 focus:ring-orange-500 outline-none transition dark:text-white">
                 </div>
 
-                <!-- Filters & Sorting -->
                 <div class="flex items-center gap-2 w-full md:w-auto">
-                    <!-- Brand Filter Select -->
                     <select id="brand-select" class="px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-xs font-semibold focus:ring-2 focus:ring-orange-500 outline-none transition cursor-pointer dark:text-white">
                         <option value="all">All Brands</option>
                         <option value="shell">Shell</option>
@@ -121,12 +117,10 @@
                         <option value="pioneer">Pioneer</option>
                     </select>
 
-                    <!-- Favorites Toggle Button -->
                     <button id="fav-toggle-btn" class="px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-amber-500 hover:text-white transition whitespace-nowrap">
                         ★ Favorites
                     </button>
 
-                    <!-- Sort Select -->
                     <select id="sort-select" class="px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none text-xs font-semibold focus:ring-2 focus:ring-orange-500 outline-none transition cursor-pointer dark:text-white">
                         <option value="distance">Nearest Distance</option>
                         <option value="price">Lowest Price</option>
@@ -137,21 +131,18 @@
         </section>
 
         <section>
-            <!-- Loading Spinner -->
             <div id="loading-spinner" class="text-center py-16">
                 <i class="fa-solid fa-spinner fa-spin text-orange-500 text-4xl mb-3"></i>
                 <p class="text-base font-semibold">Loading Ontario Stations...</p>
             </div>
 
-            <!-- Stations Container (Lazy Loaded by app.js) -->
             <div id="stations-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Chunked Card Elements will render here -->
+                <!-- Dynamic cards will be appended here -->
             </div>
         </section>
 
     </main>
 
-    <!-- Simple Dark Mode Script -->
     <script>
         document.getElementById('theme-toggle')?.addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
@@ -162,7 +153,6 @@
         });
     </script>
 
-    <!-- Main JS Bundle -->
     <script src="app.js" defer></script>
 </body>
 </html>
