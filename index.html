@@ -173,11 +173,11 @@
     </footer>
 
     <script>
-        // Supabase Client (Optional: Populate with your own keys when available)
-        const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        // Supabase Client (Fixed Base URL format)
+        const SUPABASE_URL = 'https://vphfmrejzflnmcvjmgtu.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_fgHKnLnNNwIN-yq9AlU5wA_5TBJfJP2';
         let supabaseClient = null;
-        if (SUPABASE_URL.includes('YOUR_PROJECT_ID') === false) {
+        if (SUPABASE_URL.includes('YOUR_PROJECT_ID') === false && typeof supabase !== 'undefined') {
             supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         }
 
@@ -222,13 +222,22 @@
                 try {
                     let { data: dbStations, error } = await supabaseClient.from('stations').select('*');
                     if (!error && dbStations && dbStations.length > 0) {
-                        loadedStations = dbStations.map(s => ({ ...s, distance: haversineDistance({lat, lng}, {lat: s.lat, lng: s.lng}) }));
+                        loadedStations = dbStations.map(s => ({
+                            id: s.id,
+                            brand: normalizeBrand(s.brand || 'Independent'),
+                            name: s.name || 'Gas Station',
+                            address: s.address || 'Ontario, Canada',
+                            price: parseFloat(s.price) || 185.9,
+                            updated: s.updated_at ? "Updated recently" : "Recently updated",
+                            coordinates: { lat: s.lat, lng: s.lng }, // 修正：補齊 coordinates 物件結構
+                            distance: haversineDistance({lat, lng}, {lat: s.lat, lng: s.lng})
+                        }));
                         document.getElementById('loading-spinner').classList.add('hidden');
                         renderStations();
                         return;
                     }
                 } catch (e) {
-                    console.log('Supabase fetch skipped, using Overpass API');
+                    console.log('Supabase fetch skipped or errored, falling back to Overpass API', e);
                 }
             }
 
